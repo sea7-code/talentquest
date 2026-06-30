@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>LPS TalentQuest</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+:root{
+  --orange:#F58220;--gold:#E8941A;--deep:#C75A0E;--ember:#FF6B2C;
+  --bg0:#F4EBDD;--bg1:#EFE3D0;--paper:#FFFDF8;--paper2:#FBF4E8;
+  --stroke:rgba(199,90,14,.16);--stroke2:rgba(199,90,14,.32);
+  --ink:#3A2A1B;--ink-dim:#7A6450;--ink-faint:#A8957F;
+  --good:#3FA86B;
+  --shadow:0 6px 22px rgba(120,72,20,.10);--shadow-sm:0 3px 12px rgba(120,72,20,.08);
+  --nav-h:64px;--mob-tab-h:64px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(1100px 520px at 85% -8%,rgba(245,130,32,.16),transparent 60%),
+    radial-gradient(800px 460px at -5% 105%,rgba(232,148,26,.12),transparent 55%),
+    var(--bg0);
+  color:var(--ink);min-height:100vh;overflow-x:hidden;
+}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(12px);
+  background:linear-gradient(180deg,rgba(244,235,221,.95),rgba(244,235,221,.75));
+  border-bottom:1px solid var(--stroke);
+}
+.topbar .inner{
+  max-width:1180px;margin:0 auto;padding:0 18px;
+  display:flex;align-items:center;justify-content:space-between;height:var(--nav-h);
+}
+.logo{display:flex;align-items:center;gap:11px}
+.logo .hex{filter:drop-shadow(0 3px 8px rgba(245,130,32,.35));flex-shrink:0}
+.logo .name .b{font-family:'Sora';font-weight:800;font-size:17px;letter-spacing:.3px;color:var(--ink)}
+.logo .name .b span{color:var(--deep)}
+.logo .name .s{font-size:9px;color:var(--ink-faint);font-weight:600;letter-spacing:.6px}
+/* desktop nav */
+.desktop-nav{display:flex;gap:5px}
+.desktop-nav button{
+  font-family:'Inter';font-size:12.5px;font-weight:600;color:var(--ink-dim);
+  background:transparent;border:1px solid transparent;border-radius:10px;
+  padding:8px 13px;cursor:pointer;transition:.18s;
+}
+.desktop-nav button:hover{color:var(--ink);background:rgba(245,130,32,.1)}
+.desktop-nav button.active{
+  color:#fff;background:linear-gradient(135deg,var(--gold),var(--orange));
+  box-shadow:0 4px 14px rgba(245,130,32,.34);
+}
+
+/* ===== MOBILE BOTTOM TAB BAR ===== */
+.mobile-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  height:var(--mob-tab-h);
+  background:rgba(255,253,248,.97);
+  border-top:1px solid var(--stroke2);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 -4px 20px rgba(120,72,20,.12);
+  padding:0 4px;
+}
+.mobile-nav .tabs{
+  display:flex;height:100%;align-items:stretch;
+}
+.mobile-nav button{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;border:none;background:transparent;cursor:pointer;
+  padding:6px 2px;transition:.15s;border-radius:0;position:relative;
+}
+.mobile-nav button .micon{font-size:20px;line-height:1;transition:.15s}
+.mobile-nav button .mlabel{font-size:9.5px;font-weight:600;color:var(--ink-faint);letter-spacing:.2px;transition:.15s;white-space:nowrap}
+.mobile-nav button.active .micon{transform:translateY(-1px)}
+.mobile-nav button.active .mlabel{color:var(--deep);font-weight:700}
+.mobile-nav button.active::after{
+  content:"";position:absolute;top:0;left:16%;right:16%;height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--orange));
+  border-radius:0 0 4px 4px;
+}
+
+/* ===== WRAP ===== */
+.wrap{max-width:1180px;margin:0 auto;padding:0 18px}
+
+/* ===== HERO CARD ===== */
+.hero{padding:22px 0 14px}
+.hero-card{
+  position:relative;
+  background:linear-gradient(135deg,rgba(245,130,32,.10),rgba(255,253,248,.6)),var(--paper);
+  border:1px solid var(--stroke2);border-radius:20px;
+  padding:22px 24px;box-shadow:var(--shadow);
+  display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;overflow:hidden;
+}
+.hero-card::after{content:"";position:absolute;right:-80px;top:-80px;width:300px;height:300px;
+  background:radial-gradient(circle,rgba(245,130,32,.15),transparent 70%);pointer-events:none}
+
+/* avatar ring */
+.av-ring{position:relative;width:130px;height:130px;flex-shrink:0}
+.av-ring svg.ring{position:absolute;inset:0;transform:rotate(-90deg)}
+.av-frame{position:absolute;inset:8px;border-radius:50%;overflow:hidden;
+  border:2px solid rgba(245,130,32,.5);background:linear-gradient(180deg,#dfe7f0,#c6d2e0);
+  box-shadow:inset 0 0 20px rgba(120,72,20,.1)}
+.av-frame svg{width:100%;height:100%;display:block}
+.lvl-badge{position:absolute;bottom:2px;right:2px;z-index:3;width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--deep));border:3px solid var(--paper);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 3px 10px rgba(120,72,20,.4)}
+.lvl-badge .lv{font-size:6.5px;font-weight:700;color:rgba(255,255,255,.85);line-height:1;margin-top:2px}
+.lvl-badge .num{font-family:'Sora';font-size:15px;font-weight:800;color:#fff;line-height:1}
+
+.hero-info .eyebrow{font-size:10px;font-weight:700;color:var(--deep);letter-spacing:2px;text-transform:uppercase}
+.hero-info h1{font-family:'Sora';font-size:28px;font-weight:800;margin:3px 0 6px;letter-spacing:-.4px;color:var(--ink)}
+.hero-info .titles{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--ink-dim);font-size:12.5px;font-weight:500}
+.hero-info .titles .dot{width:4px;height:4px;border-radius:50%;background:var(--ink-faint)}
+.cls-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(245,130,32,.14);
+  border:1px solid var(--stroke2);color:var(--deep);font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.qstats{display:flex;gap:14px;margin-top:12px;flex-wrap:wrap}
+.qstat{display:flex;align-items:center;gap:7px}
+.qstat .qi{width:28px;height:28px;border-radius:8px;background:rgba(245,130,32,.12);
+  display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.qstat .qt .k{font-size:8.5px;color:var(--ink-faint);font-weight:700;letter-spacing:.4px;text-transform:uppercase}
+.qstat .qt .v{font-size:12.5px;font-weight:700;color:var(--ink)}
+.xp-wrap{margin-top:13px;max-width:440px}
+.xp-top{display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:5px}
+.xp-top .l{color:var(--ink-dim)}.xp-top .r{color:var(--deep)}
+.xp-track{height:9px;background:rgba(199,90,14,.1);border-radius:20px;overflow:hidden;border:1px solid rgba(199,90,14,.12)}
+.xp-fill{height:100%;width:0;border-radius:20px;background:linear-gradient(90deg,var(--deep),var(--gold));
+  box-shadow:0 0 10px rgba(232,148,26,.45);transition:width 1.6s cubic-bezier(.2,.8,.2,1);position:relative}
+.xp-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);
+  animation:shine 2.4s linear infinite}
+@keyframes shine{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+.ready{text-align:center;flex-shrink:0;position:relative;z-index:2;
+  background:var(--paper2);border:1px solid var(--stroke2);border-radius:16px;
+  padding:14px 18px;min-width:122px;box-shadow:var(--shadow-sm)}
+.ready .cap{font-size:9px;font-weight:700;color:var(--ink-faint);letter-spacing:1.5px;text-transform:uppercase}
+.ready .big{font-family:'Sora';font-size:27px;font-weight:800;
+  background:linear-gradient(135deg,var(--gold),var(--ember));
+  -webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1;margin:4px 0 6px}
+.ready .pips{display:flex;gap:4px;justify-content:center}
+.ready .pip{width:20px;height:5px;border-radius:4px;background:rgba(199,90,14,.16)}
+.ready .pip.on{background:linear-gradient(90deg,var(--gold),var(--orange));box-shadow:0 0 5px rgba(232,148,26,.4)}
+.ready .sub{font-size:9px;color:var(--ink-faint);margin-top:7px}
+
+/* ===== TAB CONTENT ===== */
+.tabwrap{padding:6px 0 28px}
+.panel-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:16px;margin-top:6px}
+.card{background:var(--paper);border:1px solid var(--stroke);border-radius:16px;
+  padding:16px 18px;position:relative;box-shadow:var(--shadow-sm)}
+.card h3{font-family:'Sora';font-size:12.5px;font-weight:700;letter-spacing:.3px;
+  display:flex;align-items:center;gap:8px;margin-bottom:13px;text-transform:uppercase;color:var(--ink)}
+.card h3 .ic{width:24px;height:24px;border-radius:7px;background:rgba(245,130,32,.13);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card h3 .ic svg{width:14px;height:14px}
+.card h3 .tag{margin-left:auto;font-size:8.5px;font-weight:700;color:var(--deep);
+  background:rgba(245,130,32,.12);padding:3px 7px;border-radius:9px;letter-spacing:.4px;white-space:nowrap}
+
+/* radar */
+.radar-card{display:flex;flex-direction:column;align-items:center}
+#radar{width:100%;max-width:380px}
+.radar-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.radar-legend span{font-size:10px;color:var(--ink-dim);display:flex;align-items:center;gap:5px}
+.radar-legend i{width:8px;height:8px;border-radius:2px;background:var(--orange);display:inline-block}
+
+/* skills */
+.skill{margin-bottom:12px}.skill:last-child{margin-bottom:0}
+.skill .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.skill .nm{font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;color:var(--ink)}
+.skill .nm .emoji{font-size:14px}
+.skill .lv{font-family:'Sora';font-size:11px;font-weight:700}
+.skill.locked .nm{color:var(--ink-faint)}.skill.locked .lv{color:var(--ink-faint)}
+.skill .lv.active{color:var(--deep)}
+.pips-row{display:flex;gap:4px}
+.pips-row .p{height:7px;flex:1;border-radius:3px;background:rgba(199,90,14,.1);transition:.5s}
+.pips-row .p.fill{background:linear-gradient(90deg,var(--orange),var(--gold));box-shadow:0 0 5px rgba(232,148,26,.3)}
+.pips-row .p.maxed{background:linear-gradient(90deg,var(--gold),var(--ember))}
+
+/* quest */
+.quest{display:flex;gap:11px;padding:10px 0;border-bottom:1px dashed rgba(199,90,14,.14)}
+.quest:last-child{border-bottom:none;padding-bottom:0}
+.quest .q-ic{width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(245,130,32,.1);border:1px solid var(--stroke);font-size:15px}
+.quest .q-body{flex:1;min-width:0}
+.quest .q-title{font-size:12px;font-weight:600;color:var(--ink);line-height:1.3}
+.quest .q-meta{font-size:10px;color:var(--ink-faint);margin-top:2px}
+.quest .q-xp{font-size:9.5px;font-weight:700;color:var(--good);
+  background:rgba(63,168,107,.12);padding:3px 7px;border-radius:8px;
+  height:fit-content;white-space:nowrap;flex-shrink:0}
+
+/* badge */
+.badge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.bdg{text-align:center;padding:11px 4px;border-radius:12px;border:1px solid var(--stroke);
+  background:linear-gradient(180deg,rgba(245,130,32,.07),transparent)}
+.bdg.lock{opacity:.4;filter:grayscale(.5)}
+.bdg .em{font-size:22px}.bdg .bn{font-size:9px;font-weight:600;margin-top:4px;color:var(--ink-dim)}
+
+/* irow */
+.irow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;
+  border-bottom:1px solid rgba(199,90,14,.08);font-size:12.5px}
+.irow:last-child{border-bottom:none}
+.irow .k{color:var(--ink-faint);font-weight:500;padding-right:8px}
+.irow .v{font-weight:700;text-align:right;color:var(--ink)}
+.irow .v small{color:var(--deep);font-weight:600}
+
+/* attendance */
+.att-card{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+#attpie{flex-shrink:0}
+.att-legend{flex:1;min-width:160px}
+.att-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid rgba(199,90,14,.08)}
+.att-row:last-child{border-bottom:none}
+.att-row .sw{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.att-row .al{flex:1;font-size:11.5px;font-weight:600;color:var(--ink)}
+.att-row .ad{font-size:10px;color:var(--ink-faint);font-weight:500}
+.att-row .ap{font-size:11.5px;font-weight:700;color:var(--ink);min-width:28px;text-align:right}
+
+/* goals */
+.goal{display:flex;gap:12px;padding:12px;border:1px solid var(--stroke);border-radius:13px;
+  margin-bottom:10px;background:var(--paper2);transition:.2s}
+.goal:last-child{margin-bottom:0}
+.goal:hover{border-color:var(--stroke2);transform:translateX(2px)}
+.goal .g-ic{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:19px;background:linear-gradient(135deg,rgba(245,130,32,.16),rgba(232,148,26,.06));border:1px solid var(--stroke)}
+.goal .g-body{flex:1;min-width:0}
+.goal .g-title{font-size:12.5px;font-weight:700;color:var(--ink)}
+.goal .g-meta{font-size:10px;color:var(--ink-faint);margin-top:2px}
+.goal .g-prog{margin-top:7px;height:5px;background:rgba(199,90,14,.1);border-radius:10px;overflow:hidden}
+.goal .g-prog i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,var(--orange),var(--gold))}
+.goal .g-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:5px;flex-shrink:0}
+.goal .g-xp{font-size:9.5px;font-weight:700;color:var(--good);background:rgba(63,168,107,.12);padding:3px 8px;border-radius:8px}
+.goal .g-pct{font-size:9.5px;font-weight:700;color:var(--deep)}
+
+/* talent */
+.talent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.talent{padding:13px;border-radius:13px;border:1px solid var(--stroke);background:var(--paper2)}
+.talent .tem{font-size:20px}
+.talent .tnm{font-size:12px;font-weight:700;color:var(--ink);margin-top:6px}
+.talent .tlv{font-size:9px;font-weight:600;color:var(--deep);margin-top:2px;text-transform:uppercase;letter-spacing:.3px}
+.talent .tbar{margin-top:7px;height:5px;background:rgba(199,90,14,.1);border-radius:8px;overflow:hidden}
+.talent .tbar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,var(--orange),var(--gold))}
+
+.foot{text-align:center;padding:16px 0 24px;color:var(--ink-faint);font-size:11px}
+.foot b{color:var(--ink-dim)}
+
+/* training schedule */
+.train-grid{display:flex;flex-direction:column;gap:10px}
+.train-item{display:flex;align-items:center;gap:13px;padding:11px 13px;
+  border:1px solid var(--stroke);border-radius:13px;background:var(--paper2);transition:.2s}
+.train-item:hover{border-color:var(--stroke2);transform:translateX(3px)}
+.train-month{flex-shrink:0;width:52px;height:52px;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),var(--orange));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#fff;box-shadow:0 3px 9px rgba(245,130,32,.3)}
+.train-month .tm-mon{font-family:'Sora';font-size:14px;font-weight:800;line-height:1}
+.train-month .tm-yr{font-size:9px;font-weight:600;opacity:.9;margin-top:1px}
+.train-body{flex:1;min-width:0}
+.train-title{font-size:12.5px;font-weight:700;color:var(--ink)}
+.train-meta{font-size:10.5px;color:var(--ink-faint);margin-top:2px}
+.train-stat{font-size:9.5px;font-weight:700;padding:4px 10px;border-radius:9px;white-space:nowrap;flex-shrink:0}
+.train-stat.upcoming{color:var(--deep);background:rgba(245,130,32,.12);border:1px solid var(--stroke)}
+
+/* aspiration input box */
+.aspire-box{background:linear-gradient(135deg,rgba(245,130,32,.07),rgba(255,253,248,.5));
+  border:1.5px solid var(--stroke2);border-radius:15px;padding:16px}
+.asp-label{display:block;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.asp-input{width:100%;border:1px solid var(--stroke);border-radius:11px;padding:12px 13px;
+  font-family:'Inter';font-size:12.5px;color:var(--ink);background:var(--paper);resize:vertical;
+  outline:none;transition:.2s;line-height:1.5}
+.asp-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,130,32,.12)}
+.asp-input::placeholder{color:var(--ink-faint)}
+.asp-tags{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:11px}
+.asp-cat-label{font-size:10.5px;font-weight:600;color:var(--ink-faint)}
+.asp-cat{font-size:11px;font-weight:600;padding:5px 11px;border-radius:18px;cursor:pointer;
+  background:var(--paper);border:1px solid var(--stroke);color:var(--ink-dim);transition:.18s}
+.asp-cat:hover{border-color:var(--stroke2);color:var(--ink)}
+.asp-cat.sel{background:linear-gradient(135deg,var(--gold),var(--orange));color:#fff;border-color:transparent;box-shadow:0 3px 9px rgba(245,130,32,.3)}
+.asp-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;flex-wrap:wrap}
+.asp-hint{font-size:10.5px;color:var(--ink-faint)}
+.asp-hint.ok{color:var(--good);font-weight:600}
+.asp-send{font-family:'Inter';font-size:12.5px;font-weight:700;color:#fff;cursor:pointer;
+  background:linear-gradient(135deg,var(--gold),var(--orange));border:none;border-radius:11px;
+  padding:10px 20px;box-shadow:0 4px 12px rgba(245,130,32,.32);transition:.2s}
+.asp-send:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(245,130,32,.42)}
+.asp-send:active{transform:translateY(0)}
+.asp-history-title{font-size:12px;font-weight:700;color:var(--ink);margin:18px 0 11px}
+.asp-hist{border:1px solid var(--stroke);border-radius:12px;padding:11px 13px;margin-bottom:9px;background:var(--paper2)}
+.asp-hist:last-child{margin-bottom:0}
+.asp-hist-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.asp-hist-cat{font-size:9.5px;font-weight:700;color:var(--deep);background:rgba(245,130,32,.12);padding:3px 9px;border-radius:9px}
+.asp-hist-stat{font-size:9.5px;font-weight:700}
+.asp-hist-stat.reviewed{color:var(--good)}
+.asp-hist-stat.pending{color:var(--gold)}
+.asp-hist-txt{font-size:11.5px;color:var(--ink-dim);line-height:1.45}
+.asp-hist-date{font-size:9.5px;color:var(--ink-faint);margin-top:5px}
+
+/* word cloud */
+.wordcloud{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;
+  padding:18px 10px;min-height:220px}
+.wc-word{font-family:'Sora';font-weight:700;line-height:1;cursor:default;transition:.2s;white-space:nowrap}
+.wc-word:hover{transform:scale(1.08)}
+.wc-foot{text-align:center;font-size:10.5px;color:var(--ink-faint);margin-top:8px}
+.wc-foot b{color:var(--deep)}
+
+/* tab content */
+.tab-content{display:none}
+.tab-content.show{display:block;animation:fade .35s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ===== DESKTOP (>880px) ===== */
+@media(min-width:881px){
+  .mobile-nav{display:none!important}
+  body{padding-bottom:0}
+}
+
+/* ===== MOBILE (≤880px) ===== */
+@media(max-width:880px){
+  .desktop-nav{display:none}
+  .mobile-nav{display:block}
+  body{padding-bottom:calc(var(--mob-tab-h) + 4px)}
+
+  .hero{padding:14px 0 10px}
+  .hero-card{
+    grid-template-columns:1fr;
+    gap:14px;
+    padding:16px;
+    text-align:center;
+    justify-items:center;
+  }
+  /* avatar centered top */
+  .av-ring{width:110px;height:110px}
+  .lvl-badge{width:34px;height:34px}
+  .lvl-badge .num{font-size:13px}
+  /* info */
+  .hero-info{width:100%}
+  .hero-info .eyebrow{font-size:9.5px}
+  .hero-info h1{font-size:22px}
+  .hero-info .titles{justify-content:center;font-size:11.5px;gap:6px}
+  .qstats{justify-content:center;gap:10px}
+  .qstat .qi{width:26px;height:26px;font-size:13px}
+  .qstat .qt .k{font-size:8px}
+  .qstat .qt .v{font-size:11.5px}
+  .xp-wrap{max-width:100%;width:100%}
+  /* readiness below info */
+  .ready{width:100%;min-width:unset;display:flex;flex-direction:row;
+    align-items:center;gap:16px;padding:12px 16px;text-align:left;justify-content:space-between}
+  .ready .cap{font-size:8.5px;margin-bottom:0}
+  .ready .big{font-size:24px;margin:0}
+  .ready .pips{margin:0}
+  .ready .sub{font-size:9px;margin-top:0}
+  .ready .r-left{display:flex;flex-direction:column;gap:3px}
+  /* grid panels → single column */
+  .panel-grid{grid-template-columns:1fr;gap:12px}
+  /* card */
+  .card{border-radius:14px;padding:14px 15px}
+  .card h3{font-size:12px;gap:7px;margin-bottom:11px}
+  .card h3 .tag{font-size:8px}
+  /* badge 2x2 on small screens */
+  .badge-grid{grid-template-columns:repeat(4,1fr);gap:7px}
+  .bdg .em{font-size:20px}
+  .bdg .bn{font-size:8.5px}
+  /* attendance pie smaller */
+  .att-card{flex-direction:column;align-items:center;gap:14px}
+  #attpie{width:180px!important;height:180px!important}
+  .att-legend{width:100%;min-width:unset}
+  .att-row .al{font-size:12px}
+  /* talent grid 2 cols */
+  .talent-grid{grid-template-columns:repeat(2,1fr)}
+  /* quest */
+  .quest .q-title{font-size:11.5px}
+  .quest .q-meta{font-size:9.5px}
+  /* irow smaller */
+  .irow{font-size:12px}
+  /* goal */
+  .goal .g-title{font-size:12px}
+  .goal .g-meta{font-size:9.5px}
+
+  .tabwrap{padding:4px 0 18px}
+  .foot{padding:12px 0 20px;font-size:10.5px}
+
+  /* radar on mobile */
+  #radar{max-width:320px!important}
+}
+@media(max-width:400px){
+  .badge-grid{grid-template-columns:repeat(2,1fr)}
+  .talent-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-info h1{font-size:20px}
+  .qstats{gap:8px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="inner">
+    <div class="logo">
+      <svg class="hex" width="32" height="36" viewBox="0 0 46 50">
+        <defs><linearGradient id="hxg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#FBB040"/><stop offset="1" stop-color="#F58220"/></linearGradient></defs>
+        <polygon points="23,1 44,12.5 44,37.5 23,49 2,37.5 2,12.5" fill="url(#hxg)"/>
+        <text x="23" y="31" text-anchor="middle" font-family="Sora,Arial" font-size="14" font-weight="800" fill="#fff">LPS</text>
+      </svg>
+      <div class="name">
+        <div class="b">Talent<span>Quest</span></div>
+        <div class="s">LPS INTEGRATED TALENT MANAGEMENT</div>
+      </div>
+    </div>
+    <!-- desktop tabs -->
+    <nav class="desktop-nav">
+      <button class="active" data-tab="profile">🦸 Character</button>
+      <button data-tab="skills">🌳 Skill Tree</button>
+      <button data-tab="journey">📜 Quest Log</button>
+      <button data-tab="aspire">✨ Aspirasi & Bakat</button>
+    </nav>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-nav">
+  <div class="tabs">
+    <button class="active" data-tab="profile"><span class="micon">🦸</span><span class="mlabel">Character</span></button>
+    <button data-tab="skills"><span class="micon">🌳</span><span class="mlabel">Skill Tree</span></button>
+    <button data-tab="journey"><span class="micon">📜</span><span class="mlabel">Quest Log</span></button>
+    <button data-tab="aspire"><span class="micon">✨</span><span class="mlabel">Aspirasi</span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-card">
+      <!-- avatar -->
+      <div class="av-ring">
+        <svg class="ring" width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="59" fill="none" stroke="rgba(199,90,14,.13)" stroke-width="5.5"/>
+          <circle id="ringfill" cx="65" cy="65" r="59" fill="none" stroke="url(#hxg)"
+            stroke-width="5.5" stroke-linecap="round"
+            stroke-dasharray="371" stroke-dashoffset="371"/>
+        </svg>
+        <div class="av-frame">
+          <svg viewBox="0 0 120 120">
+            <rect width="120" height="120" fill="#cdd8e6"/>
+            <circle cx="60" cy="116" r="54" fill="#b9c6d8"/>
+            <path d="M22 120 L22 104 Q60 86 98 104 L98 120 Z" fill="#28415f"/>
+            <path d="M50 92 L60 120 L70 92 Z" fill="#f1f4f8"/>
+            <path d="M55 92 L60 108 L65 92 Z" fill="#F58220"/>
+            <path d="M50 92 L40 100 L46 120 L54 120 Z" fill="#32506f"/>
+            <path d="M70 92 L80 100 L74 120 L66 120 Z" fill="#32506f"/>
+            <path d="M52 80 H68 V96 Q60 100 52 96 Z" fill="#c98b63"/>
+            <ellipse cx="60" cy="58" rx="24" ry="27" fill="#d9a17c"/>
+            <path d="M36 56 Q34 30 60 28 Q86 30 84 56 Q84 44 72 40 Q60 34 48 40 Q36 44 36 56Z" fill="#2c2017"/>
+            <path d="M37 54 Q40 42 52 40 Q44 46 42 56Z" fill="#241a12"/>
+            <rect x="46" y="52" width="11" height="2.4" rx="1.2" fill="#3a2a1d"/>
+            <rect x="63" y="52" width="11" height="2.4" rx="1.2" fill="#3a2a1d"/>
+            <circle cx="51.5" cy="58" r="2.3" fill="#2a1c12"/>
+            <circle cx="68.5" cy="58" r="2.3" fill="#2a1c12"/>
+            <path d="M60 60 L57 67 Q60 69 63 67Z" fill="#c98b63"/>
+            <path d="M52 73 Q60 79 68 73" fill="none" stroke="#9c6a47" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="lvl-badge"><div class="lv">LVL</div><div class="num">12</div></div>
+      </div>
+
+      <!-- info -->
+      <div class="hero-info">
+        <div class="eyebrow">Talent Character Sheet</div>
+        <h1>Andika Pratama</h1>
+        <div class="titles">
+          <span class="cls-tag">🦸 Risk Strategist</span>
+          <span class="dot"></span><span>Analis Senior</span>
+          <span class="dot"></span><span>Grup Manajemen Risiko · 3 thn</span>
+        </div>
+        <div class="qstats">
+          <div class="qstat"><div class="qi">👤</div><div class="qt"><div class="k">Gender</div><div class="v">Laki-laki</div></div></div>
+          <div class="qstat"><div class="qi">🎂</div><div class="qt"><div class="k">Usia</div><div class="v">34 tahun</div></div></div>
+          <div class="qstat"><div class="qi">🎓</div><div class="qt"><div class="k">Pendidikan</div><div class="v">S2 Manajemen</div></div></div>
+          <div class="qstat"><div class="qi">📍</div><div class="qt"><div class="k">Lokasi</div><div class="v">Jakarta</div></div></div>
+        </div>
+        <div class="xp-wrap">
+          <div class="xp-top"><span class="l">Competency XP</span><span class="r" id="xptxt">0 / 100</span></div>
+          <div class="xp-track"><div class="xp-fill" id="xpfill"></div></div>
+        </div>
+      </div>
+
+      <!-- readiness -->
+      <div class="ready">
+        <div class="r-left">
+          <div class="cap">Kesiapan</div>
+          <div class="big">SIAP 3</div>
+          <div class="sub">3 dari 4 tahap</div>
+        </div>
+        <div class="pips"><span class="pip on"></span><span class="pip on"></span><span class="pip on"></span><span class="pip"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS CONTENT -->
+<div class="tabwrap">
+  <div class="wrap">
+
+    <!-- CHARACTER -->
+    <div class="tab-content show" id="profile">
+      <div class="panel-grid">
+        <div class="card radar-card">
+          <h3 style="align-self:flex-start">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><polygon points="12 2 22 8.5 18 21 6 21 2 8.5"/></svg></span>
+            Competency Radar <span class="tag">LIVE STATS</span>
+          </h3>
+          <svg id="radar" viewBox="0 0 400 340"></svg>
+          <div class="radar-legend">
+            <span><i></i>Power saat ini</span>
+            <span><i style="background:rgba(199,90,14,.3)"></i>Potensi maksimum</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>Profil Pegawai</h3>
+            <div class="irow"><span class="k">Jenis Kelamin</span><span class="v">Laki-laki</span></div>
+            <div class="irow"><span class="k">Usia</span><span class="v">34 tahun</span></div>
+            <div class="irow"><span class="k">Jabatan</span><span class="v">Analis Senior</span></div>
+            <div class="irow"><span class="k">Unit Kerja</span><span class="v">Grup Manajemen Risiko <small>· 3 thn</small></span></div>
+            <div class="irow"><span class="k">Pendidikan</span><span class="v">S2 Magister Manajemen <small>· 2021</small></span></div>
+            <div class="irow"><span class="k">Archetype</span><span class="v">Risk Strategist</span></div>
+          </div>
+          <div class="card">
+            <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4L12 16.8 5.7 21.4 8 14 2 9.4h7.6z"/></svg></span>Achievement Badges</h3>
+            <div class="badge-grid">
+              <div class="bdg"><div class="em">🛡️</div><div class="bn">Risk Guardian</div></div>
+              <div class="bdg"><div class="em">🎓</div><div class="bn">Magister</div></div>
+              <div class="bdg"><div class="em">🏦</div><div class="bn">Banking Pro</div></div>
+              <div class="bdg lock"><div class="em">⚖️</div><div class="bn">Legal Eagle</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILL TREE -->
+    <div class="tab-content" id="skills">
+      <div class="panel-grid">
+        <div class="card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M14.5 4l-5 16M19 8l-3 4 3 4M5 8l3 4-3 4"/></svg></span>Special Skills <span class="tag">SKILL TREE</span></h3>
+          <div id="specialSkills"></div>
+        </div>
+        <div class="card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M12 20V10M6 20V4M18 20v-6"/></svg></span>Core Competencies</h3>
+          <div id="coreSkills"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUEST LOG -->
+    <div class="tab-content" id="journey">
+      <div class="panel-grid">
+        <div class="card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Quest Log — Penugasan <span class="tag">COMPLETED</span></h3>
+          <div class="quest"><div class="q-ic">🏛️</div><div class="q-body"><div class="q-title">Tim Resolusi Bank — BPR</div><div class="q-meta">2024 · Penanganan likuidasi & penjaminan</div></div><div class="q-xp">+250 XP</div></div>
+          <div class="quest"><div class="q-ic">📉</div><div class="q-body"><div class="q-title">Satgas Stress Testing Perbankan</div><div class="q-meta">2023 · Pemodelan ketahanan sistem</div></div><div class="q-xp">+180 XP</div></div>
+          <div class="quest"><div class="q-ic">🛠️</div><div class="q-body"><div class="q-title">Penguatan Manajemen Risiko</div><div class="q-meta">2022 · Penyusunan framework risiko</div></div><div class="q-xp">+150 XP</div></div>
+        </div>
+        <div class="card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/></svg></span>Training & Sertifikasi <span class="tag">LATEST 5</span></h3>
+          <div class="quest"><div class="q-ic">💻</div><div class="q-body"><div class="q-title">Digital Leadership Program</div><div class="q-meta">Mar 2025 · kepemimpinan era digital</div></div><div class="q-xp">CERT</div></div>
+          <div class="quest"><div class="q-ic">🏅</div><div class="q-body"><div class="q-title">Certified Risk Management Professional</div><div class="q-meta">Nov 2024 · sertifikasi profesi aktif</div></div><div class="q-xp">CERT</div></div>
+          <div class="quest"><div class="q-ic">🏦</div><div class="q-body"><div class="q-title">Banking Resolution & Crisis Mgmt</div><div class="q-meta">Jul 2024 · program spesialisasi LPS</div></div><div class="q-xp">CERT</div></div>
+          <div class="quest"><div class="q-ic">📊</div><div class="q-body"><div class="q-title">Financial Modeling & Valuation</div><div class="q-meta">Feb 2024 · workshop intensif</div></div><div class="q-xp">CERT</div></div>
+          <div class="quest"><div class="q-ic">🗣️</div><div class="q-body"><div class="q-title">Public Speaking for Leaders</div><div class="q-meta">Sep 2023 · soft-skill development</div></div><div class="q-xp">CERT</div></div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>Daftar Pelatihan Wajib <span class="tag">TAHUN INI</span></h3>
+        <div class="csub" style="font-size:11px;color:var(--ink-faint);margin:-8px 0 12px">Pelatihan yang dijadwalkan untuk diikuti tahun 2026</div>
+        <div class="train-grid">
+          <div class="train-item">
+            <div class="train-month"><span class="tm-mon">JUL</span><span class="tm-yr">2026</span></div>
+            <div class="train-body">
+              <div class="train-title">🛡️ Enterprise Risk Management Lanjutan</div>
+              <div class="train-meta">Wajib · Grup Manajemen Risiko · 3 hari</div>
+            </div>
+            <span class="train-stat upcoming">Terjadwal</span>
+          </div>
+          <div class="train-item">
+            <div class="train-month"><span class="tm-mon">SEP</span><span class="tm-yr">2026</span></div>
+            <div class="train-body">
+              <div class="train-title">💻 Digital Transformation & Data Governance</div>
+              <div class="train-meta">Wajib · Pengembangan kompetensi digital · 2 hari</div>
+            </div>
+            <span class="train-stat upcoming">Terjadwal</span>
+          </div>
+          <div class="train-item">
+            <div class="train-month"><span class="tm-mon">NOV</span><span class="tm-yr">2026</span></div>
+            <div class="train-body">
+              <div class="train-title">⚖️ Hukum Perbankan & Resolusi</div>
+              <div class="train-meta">Wajib · Penguatan special skill Legal · 4 hari</div>
+            </div>
+            <span class="train-stat upcoming">Terjadwal</span>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M12 2v10l8 4"/><circle cx="12" cy="12" r="10"/></svg></span>Statistik Kehadiran <span class="tag">12 BULAN TERAKHIR</span></h3>
+        <div class="att-card">
+          <svg id="attpie" width="180" height="180" viewBox="0 0 200 200"></svg>
+          <div class="att-legend" id="attLegend"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASPIRASI -->
+    <div class="tab-content" id="aspire">
+      <div class="panel-grid">
+        <div class="card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>Sampaikan Aspirasimu <span class="tag">PEGAWAI ↔ SDM</span></h3>
+          <div class="csub" style="font-size:11px;color:var(--ink-faint);margin:-8px 0 14px">Punya ide pengembangan diri atau usulan pelatihan? Sampaikan langsung ke tim Human Capital 🚀</div>
+
+          <div class="aspire-box">
+            <label class="asp-label">💡 Sampaikan aspirasi pengembanganmu yuk!</label>
+            <textarea id="aspInput" class="asp-input" rows="4" placeholder="Contoh: Saya ingin mengikuti pelatihan Advanced Data Analytics untuk mendukung pekerjaan di manajemen risiko..."></textarea>
+            <div class="asp-tags">
+              <span class="asp-cat-label">Kategori:</span>
+              <button class="asp-cat" data-cat="Pelatihan Teknis">Pelatihan Teknis</button>
+              <button class="asp-cat" data-cat="Soft Skill">Soft Skill</button>
+              <button class="asp-cat" data-cat="Sertifikasi">Sertifikasi</button>
+              <button class="asp-cat" data-cat="Rotasi/Mutasi">Rotasi/Mutasi</button>
+            </div>
+            <div class="asp-actions">
+              <span class="asp-hint" id="aspHint">Aspirasimu akan ditinjau tim SDM secara berkala</span>
+              <button class="asp-send" id="aspSend">Kirim Aspirasi ✦</button>
+            </div>
+          </div>
+
+          <div class="asp-history-title">📨 Aspirasi yang pernah kamu kirim</div>
+          <div id="aspHistory">
+            <div class="asp-hist">
+              <div class="asp-hist-top"><span class="asp-hist-cat">Sertifikasi</span><span class="asp-hist-stat reviewed">✓ Ditindaklanjuti</span></div>
+              <div class="asp-hist-txt">Mohon difasilitasi sertifikasi CRMP lanjutan untuk jenjang berikutnya.</div>
+              <div class="asp-hist-date">Dikirim Mar 2026</div>
+            </div>
+            <div class="asp-hist">
+              <div class="asp-hist-top"><span class="asp-hist-cat">Pelatihan Teknis</span><span class="asp-hist-stat pending">⏳ Ditinjau</span></div>
+              <div class="asp-hist-txt">Tertarik pelatihan Advanced Data Science untuk risk modeling.</div>
+              <div class="asp-hist-date">Dikirim Mei 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2z"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg></span>Aspirasi Populer <span class="tag">TREN TALENTQUEST</span></h3>
+          <div class="csub" style="font-size:11px;color:var(--ink-faint);margin:-8px 0 6px">Topik pengembangan yang paling banyak diusulkan pegawai di seluruh organisasi</div>
+          <div class="wordcloud" id="wordcloud"></div>
+          <div class="wc-foot">📊 Dikumpulkan dari <b>3.420+ aspirasi</b> pegawai LPS</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#C75A0E" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span>Next Level Preview <span class="tag">GROWTH PATH</span></h3>
+        <div class="panel-grid" style="margin-top:0;gap:0 16px">
+          <div>
+            <div class="irow"><span class="k">Target kesiapan</span><span class="v"><small>SIAP 4</small> — Top Talent</span></div>
+            <div class="irow"><span class="k">XP menuju Level 13</span><span class="v">930 XP tersisa</span></div>
+          </div>
+          <div>
+            <div class="irow"><span class="k">Skill yang terbuka</span><span class="v">Insurance · Legal</span></div>
+            <div class="irow"><span class="k">Rekomendasi mentor</span><span class="v">Grup Kepatuhan</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot">Prototype konsep · <b>LPS Integrated Talent Management (TalentQuest)</b> · Data ditampilkan untuk ilustrasi</div>
+  </div>
+</div>
+
+<script>
+/* ===== TAB SWITCHING (works for both desktop & mobile nav) ===== */
+function activateTab(tab){
+  document.querySelectorAll('[data-tab]').forEach(b=>{
+    b.classList.toggle('active', b.dataset.tab===tab);
+  });
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('show'));
+  const el=document.getElementById(tab);
+  if(el)el.classList.add('show');
+  window.scrollTo({top:document.querySelector('.hero').offsetTop-70,behavior:'smooth'});
+  if(tab==='skills')renderSkills();
+  if(tab==='journey')buildPie();
+  if(tab==='aspire')renderWordCloud();
+}
+document.querySelectorAll('[data-tab]').forEach(b=>{
+  b.addEventListener('click',()=>activateTab(b.dataset.tab));
+});
+
+/* ===== RADAR ===== */
+const axes=[
+  {label:'Leadership',v:.78},{label:'Management',v:.72},{label:'Risk Mgmt',v:.88},
+  {label:'Public Policy',v:.6},{label:'Digital Tech',v:.68},{label:'Special Skills',v:.82},
+];
+function buildRadar(){
+  const svg=document.getElementById('radar');
+  const cx=200,cy=160,R=100,N=6;
+  const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/N;return[cx+r*Math.cos(a),cy+r*Math.sin(a)];};
+  let h='';
+  for(let k=4;k>=1;k--){const r=R*k/4;let p='';
+    for(let i=0;i<N;i++){const[x,y]=pt(i,r);p+=`${x.toFixed(1)},${y.toFixed(1)} `;}
+    h+=`<polygon points="${p}" fill="${k===4?'rgba(245,130,32,.04)':'none'}" stroke="rgba(199,90,14,.13)" stroke-width="1"/>`;}
+  for(let i=0;i<N;i++){
+    const[x,y]=pt(i,R);h+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(199,90,14,.13)" stroke-width="1"/>`;
+    const[lx,ly]=pt(i,R+28);
+    let a='middle';if(lx>cx+8)a='start';else if(lx<cx-8)a='end';
+    h+=`<text x="${lx}" y="${ly}" text-anchor="${a}" font-family="Sora,Arial" font-size="10" font-weight="700" fill="#7A6450" dominant-baseline="middle">${axes[i].label.toUpperCase()}</text>`;}
+  let pmax='';for(let i=0;i<N;i++){const[x,y]=pt(i,R);pmax+=`${x},${y} `;}
+  h+=`<polygon points="${pmax}" fill="rgba(245,130,32,.05)" stroke="rgba(199,90,14,.28)" stroke-width="1" stroke-dasharray="4 3"/>`;
+  let pdat='';const dots=[];
+  for(let i=0;i<N;i++){const[x,y]=pt(i,R*axes[i].v);pdat+=`${x.toFixed(1)},${y.toFixed(1)} `;dots.push([x,y]);}
+  h+=`<defs><radialGradient id="rg"><stop offset="0%" stop-color="#FBB040" stop-opacity=".55"/><stop offset="100%" stop-color="#F58220" stop-opacity=".28"/></radialGradient></defs>`;
+  h+=`<polygon id="datapoly" points="${pmax}" fill="url(#rg)" stroke="#F58220" stroke-width="2.2" style="transition:all 1.3s cubic-bezier(.2,.8,.2,1)"/>`;
+  dots.forEach(([x,y])=>{h+=`<circle cx="${x}" cy="${y}" r="3.2" fill="#F58220" stroke="#FFFDF8" stroke-width="1.5"/>`;});
+  svg.innerHTML=h;
+  requestAnimationFrame(()=>setTimeout(()=>{document.getElementById('datapoly').setAttribute('points',pdat);},280));
+}
+
+/* ===== SKILLS ===== */
+const special=[
+  {nm:'Banking',emoji:'🏦',lv:3,max:5,locked:false},
+  {nm:'Finance',emoji:'💰',lv:2,max:5,locked:false},
+  {nm:'Insurance',emoji:'🛡️',lv:0,max:5,locked:true},
+  {nm:'Legal',emoji:'⚖️',lv:0,max:5,locked:true},
+];
+const core=[
+  {nm:'Leadership',emoji:'⭐',lv:4,max:5,locked:false},
+  {nm:'Management',emoji:'🗂️',lv:4,max:5,locked:false},
+  {nm:'Risk Management',emoji:'📉',lv:4,max:5,locked:false},
+  {nm:'Public Policy',emoji:'🏛️',lv:3,max:5,locked:false},
+  {nm:'Digital Technology',emoji:'💻',lv:3,max:5,locked:false},
+];
+function skillHTML(s){
+  let pips='';for(let i=0;i<s.max;i++){
+    let c=i<s.lv?(s.lv===s.max?'p maxed':'p fill'):'p';
+    pips+=`<span class="${c}" style="transition-delay:${i*90}ms"></span>`;}
+  const t=s.locked?'LOCKED':`Lv. ${s.lv}`;
+  return `<div class="skill ${s.locked?'locked':''}">
+    <div class="top"><div class="nm"><span class="emoji">${s.emoji}</span>${s.nm}</div>
+    <div class="lv ${s.locked?'':'active'}">${t}</div></div>
+    <div class="pips-row">${pips}</div></div>`;}
+let skillsRendered=false;
+function renderSkills(){
+  if(skillsRendered)return;skillsRendered=true;
+  document.getElementById('specialSkills').innerHTML=special.map(skillHTML).join('');
+  document.getElementById('coreSkills').innerHTML=core.map(skillHTML).join('');}
+
+/* ===== PIE CHART ===== */
+const att=[
+  {l:'Hadir',d:'214 hari',v:88,c:'#3FA86B'},
+  {l:'Cuti',d:'12 hari',v:5,c:'#E8941A'},
+  {l:'Dinas Luar / WFA',d:'10 hari',v:4,c:'#F58220'},
+  {l:'Sakit / Izin',d:'7 hari',v:3,c:'#C75A0E'},
+];
+let pieBuilt=false;
+function buildPie(){
+  if(pieBuilt)return;pieBuilt=true;
+  const svg=document.getElementById('attpie');
+  const cx=100,cy=100,r=80,ir=46;let ang=-Math.PI/2;let h='';
+  const total=att.reduce((s,a)=>s+a.v,0);
+  att.forEach((a,idx)=>{
+    const sweep=a.v/total*2*Math.PI,a2=ang+sweep;
+    const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);
+    const x2=cx+r*Math.cos(a2),y2=cy+r*Math.sin(a2);
+    const xi1=cx+ir*Math.cos(a2),yi1=cy+ir*Math.sin(a2);
+    const xi2=cx+ir*Math.cos(ang),yi2=cy+ir*Math.sin(ang);
+    const large=sweep>Math.PI?1:0;
+    h+=`<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)} L${xi1.toFixed(2)},${yi1.toFixed(2)} A${ir},${ir} 0 ${large} 0 ${xi2.toFixed(2)},${yi2.toFixed(2)} Z"
+      fill="${a.c}" stroke="#FFFDF8" stroke-width="2" opacity="0">
+      <animate attributeName="opacity" to="1" dur="0.4s" begin="${idx*0.1}s" fill="freeze"/></path>`;
+    ang=a2;});
+  h+=`<text x="100" y="95" text-anchor="middle" font-family="Sora,Arial" font-size="24" font-weight="800" fill="#3A2A1B">88%</text>`;
+  h+=`<text x="100" y="113" text-anchor="middle" font-family="Inter,Arial" font-size="9.5" font-weight="600" fill="#A8957F">KEHADIRAN</text>`;
+  svg.innerHTML=h;
+  document.getElementById('attLegend').innerHTML=att.map(a=>
+    `<div class="att-row"><span class="sw" style="background:${a.c}"></span><span class="al">${a.l}</span><span class="ad">${a.d}</span><span class="ap">${a.v}%</span></div>`).join('');
+}
+
+/* ===== WORD CLOUD (Aspirasi Populer) ===== */
+const wcWords=[
+  {t:'Data Analytics',w:42,c:'#C75A0E'},
+  {t:'Leadership',w:38,c:'#F58220'},
+  {t:'Cyber Security',w:30,c:'#3D7EA6'},
+  {t:'Risk Modeling',w:34,c:'#E8941A'},
+  {t:'Public Speaking',w:26,c:'#8B6BB1'},
+  {t:'Digital Banking',w:32,c:'#C75A0E'},
+  {t:'Project Management',w:24,c:'#3FA86B'},
+  {t:'AI & Machine Learning',w:28,c:'#F58220'},
+  {t:'Negosiasi',w:18,c:'#A8957F'},
+  {t:'Sertifikasi CRMP',w:22,c:'#3D7EA6'},
+  {t:'ESG & Sustainability',w:20,c:'#3FA86B'},
+  {t:'Hukum Perbankan',w:24,c:'#D26A8A'},
+  {t:'Design Thinking',w:16,c:'#8B6BB1'},
+  {t:'English Proficiency',w:19,c:'#E8941A'},
+  {t:'Manajemen Krisis',w:23,c:'#C75A0E'},
+  {t:'Financial Modeling',w:21,c:'#3D7EA6'},
+  {t:'Komunikasi Publik',w:15,c:'#A8957F'},
+  {t:'Insurance Specialist',w:17,c:'#D26A8A'},
+];
+let wcRendered=false;
+function renderWordCloud(){
+  if(wcRendered)return;wcRendered=true;
+  const el=document.getElementById('wordcloud');
+  // size mapped from frequency weight (w): min 13px, max 32px
+  const min=15,max=42;const fmin=13,fmax=33;
+  const shuffled=[...wcWords].sort(()=>Math.random()-0.5);
+  el.innerHTML=shuffled.map(d=>{
+    const size=fmin+(d.w-min)/(max-min)*(fmax-fmin);
+    const op=0.55+(d.w-min)/(max-min)*0.45;
+    return `<span class="wc-word" style="font-size:${size.toFixed(1)}px;color:${d.c};opacity:${op.toFixed(2)}">${d.t}</span>`;
+  }).join('');
+}
+
+/* ===== ASPIRATION INPUT ===== */
+function initAspire(){
+  const cats=document.querySelectorAll('.asp-cat');
+  let selected=null;
+  cats.forEach(c=>c.addEventListener('click',()=>{
+    if(c.classList.contains('sel')){c.classList.remove('sel');selected=null;}
+    else{cats.forEach(x=>x.classList.remove('sel'));c.classList.add('sel');selected=c.dataset.cat;}
+  }));
+  const send=document.getElementById('aspSend');
+  const input=document.getElementById('aspInput');
+  const hint=document.getElementById('aspHint');
+  send.addEventListener('click',()=>{
+    const txt=input.value.trim();
+    if(!txt){hint.textContent='⚠️ Tuliskan aspirasimu dulu ya';hint.className='asp-hint';return;}
+    // prepend to history
+    const cat=selected||'Umum';
+    const hist=document.getElementById('aspHistory');
+    const div=document.createElement('div');
+    div.className='asp-hist';
+    div.style.borderColor='var(--orange)';
+    const now=new Date();
+    const bln=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][now.getMonth()];
+    div.innerHTML=`<div class="asp-hist-top"><span class="asp-hist-cat">${cat}</span><span class="asp-hist-stat pending">⏳ Baru dikirim</span></div>
+      <div class="asp-hist-txt">${txt.replace(/</g,'&lt;')}</div>
+      <div class="asp-hist-date">Dikirim ${bln} ${now.getFullYear()}</div>`;
+    hist.insertBefore(div,hist.firstChild);
+    input.value='';
+    cats.forEach(x=>x.classList.remove('sel'));selected=null;
+    hint.textContent='✓ Aspirasi terkirim ke tim Human Capital!';hint.className='asp-hint ok';
+    setTimeout(()=>{hint.textContent='Aspirasimu akan ditinjau tim SDM secara berkala';hint.className='asp-hint';},4000);
+  });
+}
+
+/* ===== INIT ===== */
+window.addEventListener('load',()=>{
+  buildRadar();
+  initAspire();
+  setTimeout(()=>{
+    document.getElementById('xpfill').style.width='74%';
+    const rf=document.getElementById('ringfill');
+    rf.style.transition='stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)';
+    rf.style.strokeDashoffset=371*(1-0.74);
+  },300);
+  let cur=0;const tx=document.getElementById('xptxt');
+  const iv=setInterval(()=>{cur+=2;if(cur>=74){cur=74;clearInterval(iv);}tx.textContent=cur+' / 100';},36);
+});
+</script>
+</body>
+</html>
